@@ -19,7 +19,7 @@ pipeline {
         stage('Build Docker Images') {
             steps {
                 script {
-                    def components = ['api-gateway', 'order-service', 'product-service']
+                    def components = ['api-gateway-service', 'order-service', 'product-service','auth-service' ]
                     components.each { component ->
                         sh """
                         docker build -t ${DOCKER_REGISTRY}/${DOCKER_REPO}/${component}:latest ./${component}
