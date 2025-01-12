@@ -2,11 +2,11 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_REGISTRY = 'docker.io' // Your container registry
-        DOCKER_REPO = 'your-username' // Replace with your Docker Hub username
-        KUBECONFIG_PATH = credentials('kubeconfig') // Kubernetes kubeconfig
-        HELM_RELEASE_NAME = 'ecommerce' // Helm release name
-        HELM_NAMESPACE = 'default' // Kubernetes namespace
+        DOCKER_REGISTRY = 'docker.io'
+        DOCKER_REPO = 'your-username'
+        KUBECONFIG_PATH = credentials('kubeconfig')
+        HELM_RELEASE_NAME = 'ecommerce'
+        HELM_NAMESPACE = 'default'
     }
 
     stages {
@@ -50,7 +50,6 @@ pipeline {
                     sh """
                     export KUBECONFIG=${KUBECONFIG_PATH}
 
-                    # Helm upgrade or install
                     helm upgrade --install ${HELM_RELEASE_NAME} ./helm \
                         --namespace ${HELM_NAMESPACE} \
                         --set apiGateway.image=${DOCKER_REGISTRY}/${DOCKER_REPO}/api-gateway:latest \
@@ -64,7 +63,9 @@ pipeline {
 
     post {
         always {
-            cleanWs() // Clean workspace after each build
+            node {
+                cleanWs() // Wrap cleanWs in a node block
+            }
         }
     }
 }
