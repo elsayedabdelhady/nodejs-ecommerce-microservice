@@ -33,7 +33,7 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://index.docker.io/v1/', 'docker-credentials') {
-                        def components = ['api-gateway', 'order-service', 'product-service']
+                        def components = ['api-gateway', 'order-service', 'product-service','auth-service']
                         components.each { component ->
                             sh """
                             docker push ${DOCKER_REGISTRY}/${DOCKER_REPO}/${component}:latest
