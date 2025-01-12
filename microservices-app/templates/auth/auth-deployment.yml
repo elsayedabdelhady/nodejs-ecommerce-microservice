@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.auth.name }}
+  labels:
+    app: {{ .Values.auth.name }}
+spec:
+  replicas: {{ .Values.auth.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.auth.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.auth.name }}
+    spec:
+      containers:
+      - name: {{ .Values.auth.name }}
+        image: {{ .Values.auth.image }}
+        ports:
+        - containerPort: {{ .Values.auth.port }}
+        env:
+        - name: MONGODB_AUTH_URI
+          value: {{ .Values.global.mongodbAuthUri }}
+        - name: JWT_SECRET
+          value: {{ .Values.global.jwtSecret }}

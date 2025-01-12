@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Values.orderDb.name }}
+  labels:
+    app: {{ .Values.orderDb.name }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.orderDb.name }}
+  serviceName: {{ .Values.orderDb.serviceName }}
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.orderDb.name }}
+    spec:
+      containers:
+      - name: mongodb
+        image: mongo:5.0
+        ports:
+        - containerPort: {{ .Values.orderDb.port }}
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          value: {{ .Values.global.mongoRootUsername }}
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          value: {{ .Values.global.mongoRootPassword }}
+        volumeMounts:
+        - name: order-db-storage
+          mountPath: /data/db
+  volumeClaimTemplates:
+  - metadata:
+      name: order-db-storage
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: {{ .Values.orderDb.pvcSize }}

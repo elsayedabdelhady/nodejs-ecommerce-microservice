@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Values.productDb.name }}
+  labels:
+    app: {{ .Values.productDb.name }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.productDb.name }}
+  serviceName: {{ .Values.productDb.serviceName }}
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.productDb.name }}
+    spec:
+      containers:
+      - name: mongodb
+        image: mongo:5.0
+        ports:
+        - containerPort: {{ .Values.productDb.port }}
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          value: {{ .Values.global.mongoRootUsername }}
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          value: {{ .Values.global.mongoRootPassword }}
+        volumeMounts:
+        - name: product-db-storage
+          mountPath: /data/db
+  volumeClaimTemplates:
+  - metadata:
+      name: product-db-storage
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: {{ .Values.productDb.pvcSize }}

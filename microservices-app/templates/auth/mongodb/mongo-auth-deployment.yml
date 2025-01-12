@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Values.authDb.name }}
+  labels:
+    app: {{ .Values.authDb.name }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.authDb.name }}
+  serviceName: {{ .Values.authDb.serviceName }}
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.authDb.name }}
+    spec:
+      containers:
+      - name: mongodb
+        image: mongo:5.0
+        ports:
+        - containerPort: {{ .Values.authDb.port }}
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          value: {{ .Values.global.mongoRootUsername }}
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          value: {{ .Values.global.mongoRootPassword }}
+        volumeMounts:
+        - name: auth-db-storage
+          mountPath: /data/db
+  volumeClaimTemplates:
+  - metadata:
+      name: auth-db-storage
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: {{ .Values.authDb.pvcSize }}

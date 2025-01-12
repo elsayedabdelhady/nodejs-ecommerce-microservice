@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.order.name }}
+  labels:
+    app: {{ .Values.order.name }}
+spec:
+  replicas: {{ .Values.order.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.order.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.order.name }}
+    spec:
+      containers:
+      - name: {{ .Values.order.name }}
+        image: {{ .Values.order.image }}
+        ports:
+        - containerPort: {{ .Values.order.port }}
+        env:
+        - name: MONGODB_ORDER_URI
+          value: {{ .Values.global.mongodbOrderUri }}
+        - name: JWT_SECRET
+          value: {{ .Values.global.jwtSecret }}
+        - name: RABBITMQ_URL
+          value: amqp://{{ .Values.rabbitmq.serviceName }}:5672
+        - name: MONGODB_PRODUCT_URI
+          value: amqp://{{ .Values.global.mongodbProductUri }}
+        - name: MONGODB_AUTH_URI
+          value: {{ .Values.global.mongodbAuthUri }}

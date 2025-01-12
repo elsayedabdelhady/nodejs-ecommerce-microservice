@@ -1,0 +1,77 @@
+global:
+  mongodbAuthUri: mongodb://auth-db-service:27017/auth
+  jwtSecret: Sc7RgHV5zKAN3HspwdTIUVHCZzE279mZXMADu6AMbFey1Cc5b9OwtAKjPzpWxvAJ
+  mongodbProductUri: mongodb://product-db-service:27017/products
+  mongodbOrderUri: mongodb://order-db-service:27017/orders
+  mongoRootUsername: root
+  mongoRootPassword: password123
+
+authDb:
+  name: auth-db
+  serviceName: auth-db-service
+  port: 27017
+  pvcSize: 2Gi
+
+productDb:
+  name: product-db
+  serviceName: product-db-service
+  port: 27017
+  pvcSize: 2Gi
+
+orderDb:
+  name: order-db
+  serviceName: order-db-service
+  port: 27017
+  pvcSize: 2Gi
+
+auth:
+  name: auth
+  replicas: 2
+  image: docker.io/elsayed2020/auth-service:latest
+  port: 3000
+  serviceName: auth
+  servicePort: 3000
+  configMap: auth-config
+
+rabbitmq:
+  name: rabbitmq
+  replicas: 1
+  image:  rabbitmq:3.8-management-alpine
+  ports:
+    amqp: 5672
+    management: 15672
+  serviceName: rabbitmq
+  dataVolume: /var/lib/rabbitmq/
+  logVolume: /var/log/rabbitmq/
+
+order:
+  name: order
+  replicas: 2
+  image:  docker.io/elsayed2020/order-service:latest
+  port: 3002
+  serviceName: order
+  servicePort: 3002
+  configMap: order-config
+
+product:
+  name: product
+  replicas: 2
+  image: docker.io/elsayed2020/product-service:latest
+  port: 3001
+  serviceName: product
+  servicePort: 3001
+  configMap: product-config
+
+apiGateway:
+  name: api-gateway
+  replicas: 2
+  image: docker.io/elsayed2020/api-gateway-service:latest
+  port: 3003
+  serviceName: api-gateway
+  servicePort: 3003
+  configMap: api-gateway-config
+
+  
+ingress:
+  host: ecommerce.local
+  tlsSecret: ecommerce-tls

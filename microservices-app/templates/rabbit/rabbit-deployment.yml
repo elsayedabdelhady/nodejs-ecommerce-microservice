@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.rabbitmq.name }}
+  labels:
+    app: {{ .Values.rabbitmq.name }}
+spec:
+  replicas: {{ .Values.rabbitmq.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.rabbitmq.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.rabbitmq.name }}
+    spec:
+      containers:
+      - name: {{ .Values.rabbitmq.name }}
+        image: {{ .Values.rabbitmq.image }}
+        ports:
+        - containerPort: 5672
+        - containerPort: 15672
+        volumeMounts:
+        - name: rabbitmq-data
+          mountPath: {{ .Values.rabbitmq.dataVolume }}
+        - name: rabbitmq-log
+          mountPath: {{ .Values.rabbitmq.logVolume }}
+      volumes:
+      - name: rabbitmq-data
+        emptyDir: {}
+      - name: rabbitmq-log
+        emptyDir: {}
