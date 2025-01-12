@@ -51,10 +51,7 @@ pipeline {
                     export KUBECONFIG=${KUBECONFIG_PATH}
 
                     helm upgrade --install ${HELM_RELEASE_NAME} ./helm \
-                        --namespace ${HELM_NAMESPACE} \
-                        --set apiGateway.image=${DOCKER_REGISTRY}/${DOCKER_REPO}/api-gateway:latest \
-                        --set orderService.image=${DOCKER_REGISTRY}/${DOCKER_REPO}/order-service:latest \
-                        --set productService.image=${DOCKER_REGISTRY}/${DOCKER_REPO}/product-service:latest
+                        --namespace ${HELM_NAMESPACE}
                     """
                 }
             }
