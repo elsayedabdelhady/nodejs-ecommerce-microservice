@@ -29,11 +29,11 @@ spec:
               service:
                 name: product
                 port:
-                  number: 3002
+                  number: 3001
           - path: /order
             pathType: Prefix
             backend:
               service:
                 name: order
                 port:
-                  number: 3001
+                  number: 3002
