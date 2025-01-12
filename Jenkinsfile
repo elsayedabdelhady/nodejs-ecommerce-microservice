@@ -3,8 +3,8 @@ pipeline {
 
     environment {
         DOCKER_REGISTRY = 'docker.io'
-        DOCKER_REPO = 'your-username'
-        KUBECONFIG_PATH = credentials('kubeconfig')
+        DOCKER_REPO = 'elsayed2020'
+        KUBECONFIG_PATH = credentials('KUBECONFIG')
         HELM_RELEASE_NAME = 'ecommerce'
         HELM_NAMESPACE = 'default'
     }
