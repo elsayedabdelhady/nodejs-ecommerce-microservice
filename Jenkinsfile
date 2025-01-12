@@ -50,8 +50,7 @@ pipeline {
                     sh """
                     export KUBECONFIG=${KUBECONFIG_PATH}
 
-                    helm upgrade --install ${HELM_RELEASE_NAME} ./helm \
-                        --namespace ${HELM_NAMESPACE}
+                    helm upgrade --install ${HELM_RELEASE_NAME} ./microservices-app 
                     """
                 }
             }
