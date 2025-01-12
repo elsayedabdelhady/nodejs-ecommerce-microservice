@@ -32,7 +32,7 @@ pipeline {
         stage('Push Docker Images') {
             steps {
                 script {
-                    docker.withRegistry('https://index.docker.io/v1/', 'docker-credentials') {
+                    docker.withRegistry('https://index.docker.io/v1/', 'DOCKER_HUB_CREDS') {
                         def components = ['api-gateway', 'order-service', 'product-service','auth-service']
                         components.each { component ->
                             sh """
