@@ -62,10 +62,13 @@ pipeline {
     }
 
     post {
-        always {
-            node {
-                cleanWs() // Wrap cleanWs in a node block
-            }
-        }
-    }
+  always {
+    script {
+       //skip the step if context is missing
+       if (getContext(hudson.FilePath)) {
+         echo "It works"
+       }
+     }
+   }
+ }
 }
